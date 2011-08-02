@@ -390,7 +390,8 @@ flush(stderr()); flush(stdout())
 
 data(Convictions)
 str(Convictions)
-barchart(boys ~ convictions, Convictions, horizontal=FALSE)
+barchart(boys ~ as.factor(convictions), Convictions, horizontal = FALSE)
+xyplot( boys ~ convictions, Convictions, type = "h", lwd = 20)
 
 
 
@@ -1095,6 +1096,35 @@ data(HumanGeneLengths)
 str(HumanGeneLengths)
 histogram(~gene.length, HumanGeneLengths, subset=gene.length<15000)
 
+if (require(manipulate)){
+  ## Resampled mean, sd, SE
+  genes <- function(n){
+    nreps = 1000
+    sample.mean <- numeric(nreps) # vector for sample means
+    sample.se <- numeric(nreps)   # vector for sample standard errors
+    sample.sd <- numeric(nreps)   # vector for sample standard deviations
+    for (i in 1:nreps){
+      random.sample <- sample(HumanGeneLengths$gene.length, size = n)
+      sample.mean[i] <- mean(random.sample)
+      sample.sd[i] <- sd(random.sample)
+      sample.se[i] <- se(random.sample)
+    }
+    hist.bins <- hist(sample.mean, breaks = 30, plot = FALSE)
+    hist(sample.mean,
+      breaks = 30, xlim = c(1000, 4000),
+      xlab = "Sample mean length (nucleotides)",
+      col = "red", main = "")
+    abline(v = mean(sample.mean), col = "blue", lwd = 2)
+    text(x = 3200, y = 0.6 * max(hist.bins$counts), 
+      pos = 4, cex = 1.25,
+      paste("n = ", n, 
+        "\nmean = ", round(mean(sample.mean), digits = 1), 
+        "\nsd = ", round(mean(sample.sd), digits = 1), 
+        "\nse = ", round(mean(sample.se), digits = 1), sep = ""))
+}
+manipulate(genes(nreps), nreps = slider(1, 500))
+}
+
 
 
 cleanEx()
@@ -1175,9 +1205,8 @@ data(JetLagKnees)
 JetLagKnees
 str(JetLagKnees)
 
-bwplot(shift~treatment, JetLagKnees)
 # since data set is small, no need to summarize
-xyplot(shift~treatment, JetLagKnees)
+xyplot(shift ~ treatment, data = JetLagKnees)
 bwplot(shift ~ treatment, data = JetLagKnees)
 
 
@@ -2932,8 +2961,35 @@ flush(stderr()); flush(stdout())
 
 trellis.par.set(theme=col.abd())  # set color theme
 show.settings()
-findData(3)                       # look for data sets in chapter 3
-findData('Finch')                 # look for data sets with 'finch' in name
+abdData(3)                        # look for data sets in chapter 3
+abdData('Finch')                  # look for data sets with 'finch' in name
+
+
+
+cleanEx()
+nameEx("abdData")
+### * abdData
+
+flush(stderr()); flush(stdout())
+
+### Name: abdData
+### Title: Find data in _Analysis of Biological Data_
+### Aliases: abdData
+### Keywords: datasets
+
+### ** Examples
+
+# find all data from examples in chapters 3 and 4
+abdData(3:4, 'Example')
+
+# order doesn't matter
+abdData('Example', 3:4)
+
+# look for data sets with Example in their name.
+abdData(pattern='Example')
+
+# look for data sets with Exercise in their name.
+abdData('Exercise')
 
 
 
@@ -3083,33 +3139,6 @@ flush(stderr()); flush(stdout())
 
 favstats(1:10)
 favstats(faithful$eruptions)
-
-
-
-cleanEx()
-nameEx("findData")
-### * findData
-
-flush(stderr()); flush(stdout())
-
-### Name: findData
-### Title: Find data in _Analysis of Biological Data_
-### Aliases: findData
-### Keywords: datasets
-
-### ** Examples
-
-# find all data from examples in chapters 3 and 4
-findData(3:4, 'Example')
-
-# order doesn't matter
-findData('Example', 3:4)
-
-# look for data sets with Example in their name.
-findData(pattern='Example')
-
-# look for data sets with Exercise in their name.
-findData('Exercise')
 
 
 
