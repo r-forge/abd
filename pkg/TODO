@@ -1,6 +1,10 @@
-* data cleaning (if you have a list of data sets that could/should be tweaked, that would be great, but we should maybe go through them all systematically anyway)
+* data cleaning (if you have a list of data sets that could/should be
+  tweaked, that would be great, but we should maybe go through them
+  all systematically anyway)
 
-* moving some code to the mosaic package and making mosaic a requirement for abd (simplifies code maintenance -- I've already begun this with my fastR package)
+* moving some code to the mosaic package and making mosaic a
+  requirement for abd (simplifies code maintenance -- I've already
+  begun this with my fastR package)
 
 * adding more demos/examples
 
@@ -8,7 +12,7 @@ rda to fix
     Eelgrass (?)
     LizardSprint (?)
 
-
+Use rptR or ICC for repeatability.
 
 Implement a manual viewer:
 abd.manual <- function(){
@@ -31,4 +35,4 @@ Error Checking
   sum.of.products()
   sum.of.squares()
   se() to sem()
-  Fix varcomps to take either Error() or one-way aov
+
